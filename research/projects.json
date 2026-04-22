@@ -1,0 +1,83 @@
+[
+  {
+    "id": "benchmarking_service",
+    "year": "2023 – present",
+    "tag": "UKSRC",
+    "title": "Benchmarking as a Service",
+    "summary": "UKSRC work to create micro-benchmarks of scientific workflows.",
+    "body": [
+      " "
+    ]
+  },
+  {
+    "id": "profiling_service",
+    "year": "2023 – present",
+    "tag": "UKSRC",
+    "title": "Profiling as a Service",
+    "summary": "UKSRC work to profile scientific workflows.",
+    "body": [
+      "In this work, we aim to provide profiling information of scientific workflows to the developers of these workflows. This allows members of the Square-Kilometre Array (SKA) radio telescope project to understand how the hardware is being used by the scientific community.",
+      "Initial work on profiling workflows have already been carried out, which lead to quantifying how much of an improvement developers managed to make. The work to make this a standardised service is on going, with the aim to provide the service to the global SKA project."
+    ]
+  },
+  {
+    "id": "uclchem_4_contribution",
+    "year": "2023 – present",
+    "tag": "Personal Research Time",
+    "title": "Object Orienting UCLCHEM Python wrapper",
+    "summary": "Contribution to UCLCHEM 4.0 Release.",
+    "body": [
+      "The ongoing effort by Gijs Vermarien under Professor Serena Viti at Leiden, to update the astrochemical modeling code UCLCHEM to version 4.0, has been supported with work to update the fortran to python wrapper.",
+      "In order to modernise, and allow for easier maintenance of the python wrapper, I have modified the previously function based wrapper to be classes that allow object oriented handling of the chemical models. This included creating an abstract class that contains all code that would be found in each model type."
+    ],
+    "links": [
+      { "label": "GitHub", "href": "https://github.com/uclchem/UCLCHEM" }
+    ]
+  },
+  {
+    "id": "aco_vr",
+    "year": "2022 – 2023",
+    "tag": "PhD work",
+    "title": "ACO VR Outreach Project",
+    "summary": "Unity based VR project for outreach.",
+    "body": [
+      "The AstroChemical Origins (ACO) Network, was funded by the European Union’s Horizon 2020 research and innovation programme under the Marie Skłodowska-Curie grant agreement No 811312, and provided PhD positions for a multidisciplinary project that spanned multiple countries.",
+      "One Deliverable for the project, was a VR Outreach project, which I created using Unity, Blender and the C# coding language. Some contributions were made to animations and the scripts for the voice components by fellow ACO students, while the rest of the technical and modelling work was performed as part of my PhD work."
+    ],
+    "images": [
+      { "file": "aco_vr_Disk.png", "caption": "Stellar disk surrounding new star." },
+      { "file": "aco_vr_Dust.png", "caption": "Creating planetoids inside of a dusty disk." }
+    ]
+  },
+  {
+    "id": "aco_health",
+    "year": "2022",
+    "tag": "PhD work",
+    "title": "Healthcare Data Dashboard",
+    "summary": "Unity based VR project for outreach.",
+    "body": [
+      "As a secondment during my PhD, I worked for three months with a healthcare research group at King's College London. Initially the focus was to stand up a prototype semi-structured database, with which a data dashboard could be created.",
+      "This was created using Elasticsearch and Kibana, with the final product providing more than just a simple prototype, as the work was robust enough to allow for continued use of it."
+    ],
+    "images": [
+      { "file": "aco_health_first.jpeg", "caption": "This shows MOCK data for privacy reasons." },
+      { "file": "aco_health_second.jpeg", "caption": "This shows MOCK data for privacy reasons." }
+    ]
+  },
+  {
+    "id": "uclchemcmc",
+    "year": "2020 – 2022",
+    "tag": "PhD work",
+    "title": "UCLCHEMCMC",
+    "summary": "Statistical modeling tool supported by SQL caching.",
+    "body": [
+      "Funded by the European Union’s Horizon 2020 research and innovation programme under the Marie Skłodowska-Curie grant agreement No 811312, I was a PhD student tasked with developing a statistical modeling tool for the use with astrochemical observations.",
+      "UCLCHEMCMC was this tool. It uses an SQL database to store previously run chemical models, and searches the database before creating new models. This, combined with a Markov chain Monte Carlo, allows UCLCHEMCMC to explore parameters space, while preventing redundant model calculations, saving execution time.",
+      "As inputs, we allow line obersvations with errors to be given to UCLCHEMCMC, combined with limiting the ranges of the physical parameter space to explore. These are then used to calculate a posterior of the physical parameters space to inform astronomers on the potential physical parameters of their observed object."
+    ],
+    "links": [
+      { "label": "GitHub", "href": "https://github.com/Marcus-Keil/UCLCHEMCMC" },
+      { "label": "Paper", "href": "https://doi.org/10.3847/1538-4357/ac51d0" }
+    ]
+  }
+]

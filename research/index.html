@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Research — Marcus Keil</title>
+  <link rel="stylesheet" href="../shared/style.css">
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    #root { height: 100%; }
+
+    /* Scrollbar styling for content panel */
+    .content-scroll::-webkit-scrollbar { width: 4px; }
+    .content-scroll::-webkit-scrollbar-track { background: transparent; }
+    .content-scroll::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 2px; }
+  </style>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script type="text/babel" src="../shared/nav.js"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+// Projects are loaded from research/projects.json — edit that file to add/remove entries.
+// Format: [{ id, year, tag, title, summary, body: ["para1", "para2"], links: [{label, href}] }]
+function useProjects() {
+  const [projects, setProjects] = useState([]);
+  const [error, setError] = useState(false);
+  useEffect(() => {
+    fetch('projects.json')
+      .then(r => r.json())
+      .then(data => setProjects(data))
+      .catch(() => setError(true));
+  }, []);
+  return { projects, error };
+}
+
+function ProjectCard({ project, isActive, onClick }) {
+  return (
+    <div
+      onClick={onClick}
+      style={{
+        padding: '15px 25px',
+        marginLeft: -13,
+        marginRight: 0,
+        borderTop: '1px solid var(--rule)',
+        cursor: 'pointer',
+        transition: 'opacity 0.2s, background 0.2s',
+        opacity: isActive ? 1 : 0.55,
+        background: isActive ? 'rgba(26,25,23,0.07)' : 'transparent',
+        borderRadius: 4,
+        borderLeft: isActive ? '2px solid var(--accent)' : '2px solid transparent',
+        paddingLeft: isActive ? 12 : 12,
+      }}
+      onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = 'rgba(26,25,23,0.03)'; }}
+      onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
+    >
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
+        <span style={{ fontFamily: 'var(--font-body)', fontSize: 10, letterSpacing: '0.13em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
+          {project.tag}
+        </span>
+        <span style={{ fontFamily: 'var(--font-body)', fontSize: 11, color: 'var(--text-muted)' }}>
+          {project.year}
+        </span>
+      </div>
+      <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1rem, 1.4vw, 1.3rem)', fontWeight: 400, color: 'var(--text-primary)', lineHeight: 1.2, marginBottom: 8 }}>
+        {project.title}
+      </div>
+      <div style={{ fontFamily: 'var(--font-body)', fontWeight: 300, fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+        {project.summary}
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const { projects, error } = useProjects();
+  const [active, setActive] = useState(null);
+  const [loaded, setLoaded] = useState(false);
+  const contentRef = useRef(null);
+
+  useEffect(() => { setTimeout(() => setLoaded(true), 80); }, []);
+  useEffect(() => { if (projects.length > 0 && !active) setActive(projects[0].id); }, [projects]);
+
+  const activeProject = projects.find(p => p.id === active);
+
+  const handleSelect = (id) => {
+    setActive(id);
+    if (contentRef.current) contentRef.current.scrollTop = 0;
+  };
+
+  const fadeStyle = {
+    opacity: loaded ? 1 : 0,
+    transform: loaded ? 'none' : 'translateY(12px)',
+    transition: 'opacity 0.6s ease, transform 0.6s ease',
+  };
+
+  return (
+    <div style={{ display: 'flex', height: '100vh', width: '100vw', overflow: 'hidden' }}>
+
+      <SiteNav current="research" basePath="" />
+
+      {/* ── Left panel — project list ── */}
+      <div style={{
+        width: '20%',
+        minWidth: 320,
+        height: '100%',
+        background: 'var(--bg-left)',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        padding: '80px 1vw 40px 1vw',
+        borderRight: '1px solid var(--rule)',
+        ...fadeStyle,
+      }}>
+        <div style={{ fontFamily: 'var(--font-body)', fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: 8 }}>
+          Marcus Keil
+        </div>
+        <div style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: 'clamp(1.6rem, 2.5vw, 2.6rem)', lineHeight: 1.1, marginBottom: 4 }}>
+          Research
+        </div>
+        <div style={{ width: 36, height: 1.5, background: 'var(--accent)', margin: '16px 0 28px' }} />
+
+        <div style={{ overflowY: 'auto', flex: 1 }}>
+          {error && <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--text-muted)', padding: '20px 0' }}>Could not load projects.json.</div>}
+          {projects.map(p => (
+            <ProjectCard
+              key={p.id}
+              project={p}
+              isActive={active === p.id}
+              onClick={() => handleSelect(p.id)}
+            />
+          ))}
+          <div style={{ borderTop: '1px solid var(--rule)' }} />
+        </div>
+
+        <a href="https://github.com/Marcus-Keil" target="_blank" rel="noopener noreferrer"
+          className="link-subtle"
+          style={{ marginTop: 28, fontSize: 11 }}>
+          ← Back to home
+        </a>
+      </div>
+
+      {/* ── Right panel — active project detail ── */}
+      <div
+        ref={contentRef}
+        className="content-scroll"
+        style={{
+          flex: 1,
+          height: '100%',
+          overflowY: 'auto',
+          background: '#faf8f5',
+          padding: 'clamp(60px, 8vh, 100px) clamp(40px, 6vw, 80px)',
+          ...fadeStyle,
+          transitionDelay: '0.08s',
+        }}
+      >
+        <div style={{ maxWidth: '80%' }}>
+          {!activeProject ? (
+            <div style={{ fontFamily: 'var(--font-body)', fontWeight: 300, fontSize: 14, color: 'var(--text-muted)' }}>Select a project.</div>
+          ) : (
+          <div>
+          {/* Tag + year */}
+          <div style={{ display: 'flex', gap: 16, alignItems: 'center', marginBottom: 20 }}>
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
+              {activeProject.tag}
+            </span>
+            <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--rule)', display: 'inline-block' }} />
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: 11, color: 'var(--text-muted)' }}>
+              {activeProject.year}
+            </span>
+          </div>
+
+          {/* Title */}
+          <h1 style={{
+            fontFamily: 'var(--font-display)', fontWeight: 300,
+            fontSize: 'clamp(1.8rem, 3vw, 2.8rem)', lineHeight: 1.1,
+            color: 'var(--text-primary)', marginBottom: 20,
+          }}>
+            {activeProject.title}
+          </h1>
+
+          <div style={{ width: 36, height: 1.5, background: 'var(--accent)', marginBottom: 28 }} />
+
+          {/* Summary */}
+          <p style={{
+            fontFamily: 'var(--font-display)', fontStyle: 'italic', fontWeight: 300,
+            fontSize: 'clamp(1rem, 1.5vw, 1.25rem)', lineHeight: 1.6,
+            color: 'var(--text-secondary)', marginBottom: 28,
+          }}>
+            {activeProject.summary}
+          </p>
+
+          {/* Body + optional images side by side */}
+          <div style={{
+            display: 'flex', gap: 32, alignItems: 'flex-start',
+          }}>
+            {/* Body paragraphs */}
+            <div style={{ flex: 1, minWidth: 0 }}>
+              {(Array.isArray(activeProject.body) ? activeProject.body : [activeProject.body]).map((para, i) => (
+                <p key={i} style={{
+                  fontFamily: 'var(--font-body)', fontWeight: 300,
+                  fontSize: 'clamp(0.85rem, 1.1vw, 1rem)', lineHeight: 1.8,
+                  color: 'var(--text-primary)', opacity: 0.8,
+                  marginBottom: 20,
+                }}>
+                  {para}
+                </p>
+              ))}
+            </div>
+
+            {/* Images — only rendered if provided */}
+            {activeProject.images?.length > 0 && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16, flexShrink: 0, width: 600 }}>
+                {activeProject.images.slice(0, 2).map((img, i) => (
+                  <div key={i}>
+                    <img
+                      src={`img/${img.file}`}
+                      alt={img.caption || ''}
+                      style={{ width: '100%', display: 'block', borderRadius: 2, background: 'var(--rule)' }}
+                    />
+                    {img.caption && (
+                      <div style={{
+                        fontFamily: 'var(--font-body)', fontSize: 11, color: 'var(--text-muted)',
+                        marginTop: 6, lineHeight: 1.4,
+                      }}>{img.caption}</div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Links */}
+          {activeProject.links?.length > 0 && (
+            <div style={{ display: 'flex', gap: 20, marginTop: 36, paddingTop: 24, borderTop: '1px solid var(--rule)' }}>
+              {activeProject.links.map(link => (
+                <a key={link.label} href={link.href}
+                  className="link-subtle"
+                  style={{ fontSize: 11 }}>
+                  {link.label} ↗
+                </a>
+              ))}
+            </div>
+          )}
+          </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
