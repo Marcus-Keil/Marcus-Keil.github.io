@@ -6,7 +6,8 @@
     "title": "Benchmarking as a Service",
     "summary": "UKSRC work to create micro-benchmarks of scientific workflows.",
     "body": [
-      " "
+      "The UK Square-kilometre Array (SKA) Regional Center (UKSRC) Benchmarking service, focuses on isolating the impact hardware and systems configuration by creating micro-benchmarks from scientific workflows that will be used with SKA data.",
+      "In order to do this, we focus on identifying how each workflow is executed, how much data they require and then tweak the execution such that it is still representative of the full workflow execution in terms of what hardware is used and how much, but not in how long the hardware is used. Then, we ensure the micro-benchmark is portable by including it into a forked version of the excalibur-tests benchmarking framework (https://github.com/ukri-excalibur/excalibur-tests), which is being modified to suit the UKSRC needs."
     ]
   },
   {
